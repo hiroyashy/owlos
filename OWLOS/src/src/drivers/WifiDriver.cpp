@@ -5,6 +5,7 @@ Copyright 2019, 2020 by:
 - Vitalii Glushchenko (cehoweek@gmail.com)
 - Denys Melnychuk (meldenvar@gmail.com)
 - Denis Kirin (deniskirinacs@gmail.com)
+- Mykyta Poturai (mykyta.poturai@tutanota.com)
 
 This file is part of Ready IoT Solution - OWLOS
 

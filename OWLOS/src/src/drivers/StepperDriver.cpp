@@ -5,6 +5,7 @@ Copyright 2019, 2020 by:
 - Vitalii Glushchenko (cehoweek@gmail.com)
 - Denys Melnychuk (meldenvar@gmail.com)
 - Denis Kirin (deniskirinacs@gmail.com)
+- Mykyta Poturai (mykyta.poturai@tutanota.com)
 
 This file is part of Ready IoT Solution - OWLOS
 
@@ -144,70 +145,65 @@ String StepperDriver::getAllProperties()
 	return result;
 }
 
-String StepperDriver::onMessage(String _topic, String _payload, int8_t transportMask)
+String StepperDriver::onMessage(String route, String _payload, int8_t transportMask)
 {
-	String result = BaseDriver::onMessage(_topic, _payload, transportMask);
-	if (!result.equals(WrongPropertyName)) return result;
-	//Stepper driver to position step counter -----------------------------------
-	if (String(topic + "/gettoposition").equals(_topic))
-	{
-		result = onGetProperty("toposition", String(getToPosition()), transportMask);
-	}
-	else if (String(topic + "/settoposition").equals(_topic))
-	{
-		result = String(setToPosition(atoi(_payload.c_str())));
-	}
-	else
-		//Busy ----------------------------------------------------------------------
-		if (String(topic + "/getbusy").equals(_topic))
-		{
-			result = onGetProperty("busy", String(getBusy()), transportMask);
-		}
-		else if (String(topic + "/setbusy").equals(_topic))
-		{
-			result = String(setBusy(atoi(_payload.c_str())));
-		}
-		else
-			//Stop ----------------------------------------------------------------------
-			if (String(topic + "/getstop").equals(_topic))
-			{
-				result = onGetProperty("stop", String(getStop()), transportMask);
-			}
-			else if (String(topic + "/setstop").equals(_topic))
-			{
-				result = String(setStop(atoi(_payload.c_str())));
-			}
-			else
-				//Position -----------------------------------------------------------------
-				if (String(topic + "/getposition").equals(_topic))
-				{
-					result = onGetProperty("position", String(getPosition()), transportMask);
-				}
-				else if (String(topic + "/setposition").equals(_topic))
-				{
-					result = String(setPosition(atoi(_payload.c_str()), true));
-				}
-				else
-					//Range -----------------------------------------------------------------
-					if (String(topic + "/getrange").equals(_topic))
-					{
-						result = onGetProperty("range", String(getRange()), transportMask);
-					}
-					else if (String(topic + "/setrange").equals(_topic))
-					{
-						result = String(setRange(atoi(_payload.c_str())));
-					}
-					else
-						//Speed ----------------------------------------------------------------
-						if (String(topic + "/getspeed").equals(_topic))
-						{
-							result = onGetProperty("speed", String(getSpeed()), transportMask);
-						}
-						else if (String(topic + "/setspeed").equals(_topic))
-						{
-							result = String(setSpeed(atoi(_payload.c_str())));
-						}
-	return result;
+    String result = BaseDriver::onMessage(route, _payload, transportMask);
+    if (!result.equals(WrongPropertyName)) return result;
+    //Stepper driver to position step counter -----------------------------------
+    if (matchRoute(route, topic, "/gettoposition"))
+    {
+        result = onGetProperty("toposition", String(getToPosition()), transportMask);
+    }
+    else if (matchRoute(route, topic, "/settoposition"))
+    {
+        result = String(setToPosition(atoi(_payload.c_str())));
+    }
+    //Busy ----------------------------------------------------------------------
+    else if (matchRoute(route, topic, "/getbusy"))
+    {
+        result = onGetProperty("busy", String(getBusy()), transportMask);
+    }
+    else if (matchRoute(route, topic, "/setbusy"))
+    {
+        result = String(setBusy(atoi(_payload.c_str())));
+    }
+    //Stop ----------------------------------------------------------------------
+    else if (matchRoute(route, topic, "/getstop"))
+    {
+        result = onGetProperty("stop", String(getStop()), transportMask);
+    }
+    else if (matchRoute(route, topic, "/setstop"))
+    {
+        result = String(setStop(atoi(_payload.c_str())));
+    }
+    //Position -----------------------------------------------------------------
+    else if (matchRoute(route, topic, "/getposition"))
+    {
+        result = onGetProperty("position", String(getPosition()), transportMask);
+    }
+    else if (matchRoute(route, topic, "/setposition"))
+    {
+        result = String(setPosition(atoi(_payload.c_str()), true));
+    }
+    //Range -----------------------------------------------------------------
+    else if (matchRoute(route, topic, "/getrange"))
+    {
+        result = onGetProperty("range", String(getRange()), transportMask);
+    }
+    else if (matchRoute(route, topic, "/setrange"))
+    {
+        result = String(setRange(atoi(_payload.c_str())));
+    }
+    //Speed ----------------------------------------------------------------
+    else if (matchRoute(route, topic, "/getspeed"))
+    {
+        result = onGetProperty("speed", String(getSpeed()), transportMask);
+    }
+    else if (matchRoute(route, topic, "/setspeed"))
+    {
+        result = String(setSpeed(atoi(_payload.c_str())));
+    }
+    return result;
 
 }
 
